@@ -1,0 +1,21 @@
+- Entidades:
+    -Rooms: (cubo)
+        - width: 10
+        - hieght: 10
+        - deep: 10
+        - ready?: boolean
+        - created-at: timestamp
+        -monedas: 
+            - xmax:
+            - xmin:
+            - ymax:
+            - status: boolean
+            - owner: null | string
+        -metodos:
+            - Create Room:
+                constructor(w, h, d, quantity){
+                    create-money: quantity
+                }
+            - reGenerateMoney().timeOut(1hs)
+
+

@@ -1,0 +1,19 @@
+{
+    "rooms": [
+      {
+        "id": "room1",
+        "width": 10,
+        "height": 10,
+        "depth": 10,
+        "coinQuantity": 10
+      },
+      {
+        "id": "room2",
+        "width": 8,
+        "height": 8,
+        "depth": 8,
+        "coinQuantity": 8
+      }
+    ]
+  }
+  
