@@ -52,12 +52,15 @@ class Room {
         this.generateCoins(quantity); // Generate new coins
     }
 }
+const redisUrl = 'rediss://red-cjn8ma6qdesc73fvnsi0:Q6lCaD2sgsWIbqTesSRfZT06bfsRyCA9@oregon-redis.render.com:6379'
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const server = http.createServer(app);
 // @ts-ignore
 const io = socketIO(server);
-const redis = new Redis(); // Conexión to Redis
+const redis = new Redis(redisUrl); // Conexión to Redis
 
 // Read file JSON
 const configPath = './config.json';
@@ -108,7 +111,7 @@ app.get('/api/room/:roomId/coins/count', async (req, res) => {
     res.status(200).json({ count: availableCoinsCount });
 });
 
-// SOCKET
+// SOCKET   
 
 io.on('connection', (socket: any) => {
     // Join room

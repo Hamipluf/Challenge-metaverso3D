@@ -45,15 +45,18 @@ class Room {
         }
     }
     reGenerateCoins(quantity) {
-        this.coins = []; // Vaciar la lista de monedas existentes
-        this.generateCoins(quantity); // Generar nuevas monedas
+        this.coins = []; // Empty the list of existing coins
+        this.generateCoins(quantity); // Generate new coins
     }
 }
+const redisUrl = 'rediss://red-cjn8ma6qdesc73fvnsi0:Q6lCaD2sgsWIbqTesSRfZT06bfsRyCA9@oregon-redis.render.com:6379';
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 const server = http_1.default.createServer(app);
 // @ts-ignore
 const io = (0, socket_io_1.default)(server);
-const redis = new ioredis_1.default(); // Conexión a Redis
+const redis = new ioredis_1.default(redisUrl); // Conexión to Redis
 // Read file JSON
 const configPath = './config.json';
 const rawConfig = fs_1.default.readFileSync(configPath, 'utf-8');
@@ -68,8 +71,8 @@ config.rooms.forEach((roomConfig) => {
 function regenerateCoinsPeriodically(roomConfig) {
     const { id, coinQuantity } = roomConfig;
     const room = rooms[id];
-    room.reGenerateCoins(coinQuantity); // Regenerar monedas según la cantidad del config.json
-    redis.set(`coins:${id}`, JSON.stringify(room.coins)); // Actualizar la persistencia en Redis
+    room.reGenerateCoins(coinQuantity); // Regenerate coins based on amount in config.json
+    redis.set(`coins:${id}`, JSON.stringify(room.coins)); // Update persistence on Redis
     setTimeout(() => regenerateCoinsPeriodically(roomConfig), 60 * 60 * 1000);
 }
 // ENDPOINTS
@@ -90,7 +93,7 @@ app.get('/api/room/:roomId/coins/count', (req, res) => __awaiter(void 0, void 0,
     const availableCoinsCount = rooms[roomId].coins.filter(coin => coin.status).length;
     res.status(200).json({ count: availableCoinsCount });
 }));
-// SOCKET
+// SOCKET   
 io.on('connection', (socket) => {
     // Join room
     socket.on('joinRoom', (roomId) => __awaiter(void 0, void 0, void 0, function* () {
